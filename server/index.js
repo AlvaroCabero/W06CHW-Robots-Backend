@@ -7,7 +7,7 @@ const app = express();
 
 const initializeServer = (port) => {
   const server = app.listen(port, () => {
-    debug(chalk.cyan(`Escuchando en el puerto ${port}`));
+    debug(chalk.cyan(`Listening to port ${port}`));
   });
 
   server.on("error", (error) => {
@@ -19,5 +19,10 @@ const initializeServer = (port) => {
 };
 
 app.use(morgan("dev"));
+
+app.use(express.json());
+
+app.use(notFoundErrorHandler);
+app.use(generalErrorHandler);
 
 module.exports = initializeServer;
