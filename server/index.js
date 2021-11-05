@@ -3,6 +3,7 @@ const debug = require("debug")("robots:server");
 const express = require("express");
 const morgan = require("morgan");
 const { notFoundErrorHandler, generalErrorHandler } = require("./error");
+const robotsRoutes = require("../database/models/robot");
 
 const app = express();
 

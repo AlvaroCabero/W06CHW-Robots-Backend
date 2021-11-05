@@ -2,9 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const {
-  getRobots
-}
+const getRobots
 
 router.get("/", getRobots);
 
