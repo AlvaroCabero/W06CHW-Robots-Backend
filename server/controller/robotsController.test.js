@@ -111,5 +111,31 @@ describe("Given a getRobotById function,", () => {
         expect(res.json).toHaveBeenCalledWith(roboz);
       });
     });
+
+    describe("And Robot.findById resolves to Id Not Found", () => {
+      test("Then it should call the next function with the 404 error", async () => {
+        const id = "";
+        const error = new Error("Robot not found");
+        error.code = 404;
+
+        const req = {
+          params: {
+            id,
+          },
+        };
+        const res = {
+          json: jest.fn(),
+        };
+
+        Robot.findById = jest.fn().mockResolvedValue(null);
+        const next = jest.fn();
+
+        await getRobotById(req, res, next);
+
+        expect(next).toHaveBeenCalledWith(error);
+        // expect(error).toHaveProperty("code");
+        expect(next.mock.calls[0][0].code).toBe(error.code);
+      });
+    });
   });
 });
