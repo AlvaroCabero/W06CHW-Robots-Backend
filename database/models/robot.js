@@ -1,23 +1,34 @@
 const { Schema, model } = require("mongoose");
 
-nem;
 const robotSchema = new Schema({
   name: {
     type: String,
     required: true,
   },
-  speed: {
-    type: Number,
-    required: true,
-    min: 0,
-    max: 10,
-  },
   img: {
     type: String,
     required: false,
   },
+  Stats: {
+    speed: {
+      type: Number,
+      required: true,
+      min: 0,
+      max: 10,
+    },
+    resistance: {
+      type: Number,
+      required: true,
+      min: 0,
+      max: 10,
+    },
+    creation: {
+      type: Date,
+      required: true,
+    },
+  },
 });
 
-const Robot = model("Robot", robotSchema);
+const Robot = model("Robot", robotSchema, "robots");
 
 module.exports = Robot;

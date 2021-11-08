@@ -1,10 +1,7 @@
 const express = require("express");
+const getRobots = require("../controller/robotsController");
 
 const router = express.Router();
-
-const {
-  getRobots
-}
 
 router.get("/", getRobots);
 
