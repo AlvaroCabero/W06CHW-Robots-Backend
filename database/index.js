@@ -5,6 +5,14 @@ const mongoose = require("mongoose");
 
 const connectDB = () =>
   new Promise((resolve, reject) => {
+    mongoose.set("toJSON", {
+      virtuals: true,
+      transform: (doc, ret) => {
+        // eslint-disable-next-line no-underscore-dangle
+        delete ret._id;
+      },
+    });
+
     mongoose.connect(process.env.ANDROIDDB_STRING, (error) => {
       if (error) {
         debug(chalk.red("Error starting DataBase"));
