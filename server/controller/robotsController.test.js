@@ -62,5 +62,80 @@ describe("Given a getRobotById function,", () => {
 
       expect(Robot.findById).toHaveBeenCalledWith(id);
     });
+
+    describe("And Robot.findById rejects", () => {
+      test("Then it should invoke the next function with the error rejected", async () => {
+        const error = {};
+        Robot.findById = jest.fn().mockRejectedValue(error);
+        const req = {
+          params: {
+            id: 0,
+          },
+        };
+        const res = {};
+        const next = jest.fn();
+
+        await getRobotById(req, res, next);
+
+        expect(next).toHaveBeenCalledWith(error);
+        expect(error).toHaveProperty("code");
+        expect(error.code).toBe(400);
+      });
+    });
+
+    describe("And Robot.findById resolves to Roboz", () => {
+      test("Then it should call res.json method with Roboz Data", async () => {
+        const id = 33;
+        const roboz = {
+          id,
+          name: "Roboz",
+          img: "https://cdn.computerhoy.com/sites/navi.axelspringer.es/public/styles/480/public/media/image/2012/10/4559-6-mejores-robots.jpg?itok=ZoIBaSaR",
+          Stats: {
+            speed: 4,
+            resistance: 2,
+            creation: "1977-01-01T23:00:00.000+00:00",
+          },
+        };
+        Robot.findById = jest.fn().mockResolvedValue(roboz);
+        const req = {
+          params: {
+            id,
+          },
+        };
+        const res = {
+          json: jest.fn(),
+        };
+
+        await getRobotById(req, res);
+
+        expect(res.json).toHaveBeenCalledWith(roboz);
+      });
+    });
+
+    describe("And Robot.findById resolves to Id Not Found", () => {
+      test("Then it should call the next function with the 404 error", async () => {
+        const id = "";
+        const error = new Error("Robot not found");
+        error.code = 404;
+
+        const req = {
+          params: {
+            id,
+          },
+        };
+        const res = {
+          json: jest.fn(),
+        };
+
+        Robot.findById = jest.fn().mockResolvedValue(null);
+        const next = jest.fn();
+
+        await getRobotById(req, res, next);
+
+        expect(next).toHaveBeenCalledWith(error);
+        // expect(error).toHaveProperty("code");
+        expect(next.mock.calls[0][0].code).toBe(error.code);
+      });
+    });
   });
 });
