@@ -82,5 +82,34 @@ describe("Given a getRobotById function,", () => {
         expect(error.code).toBe(400);
       });
     });
+
+    describe("And Robot.findById resolves to Roboz", () => {
+      test("Then it should call res.json method with Roboz Data", async () => {
+        const id = 33;
+        const roboz = {
+          id,
+          name: "Roboz",
+          img: "https://cdn.computerhoy.com/sites/navi.axelspringer.es/public/styles/480/public/media/image/2012/10/4559-6-mejores-robots.jpg?itok=ZoIBaSaR",
+          Stats: {
+            speed: 4,
+            resistance: 2,
+            creation: "1977-01-01T23:00:00.000+00:00",
+          },
+        };
+        Robot.findById = jest.fn().mockResolvedValue(roboz);
+        const req = {
+          params: {
+            id,
+          },
+        };
+        const res = {
+          json: jest.fn(),
+        };
+
+        await getRobotById(req, res);
+
+        expect(res.json).toHaveBeenCalledWith(roboz);
+      });
+    });
   });
 });
