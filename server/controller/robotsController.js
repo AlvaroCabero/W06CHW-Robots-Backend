@@ -26,4 +26,17 @@ const getRobotById = async (req, res, next) => {
   }
 };
 
-module.exports = { getRobots, getRobotById };
+const createRobot = async (req, res, next) => {
+  try {
+    const robot = req.body;
+    debug(robot);
+    const newRobot = await Robot.create(robot);
+    res.json(newRobot);
+  } catch (error) {
+    error.code = 400;
+    error.message = "Please introduce valid data";
+    next(error);
+  }
+};
+
+module.exports = { getRobots, getRobotById, createRobot };
