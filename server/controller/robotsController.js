@@ -38,5 +38,10 @@ const createRobot = async (req, res, next) => {
     next(error);
   }
 };
+const deleteRobot = async (req, res, next) => {
+  const { i } = req.params;
+  try {
+  } catch (error) {}
+};
 
 module.exports = { getRobots, getRobotById, createRobot };

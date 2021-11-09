@@ -152,33 +152,57 @@ describe("Given a createRobot function", () => {
           creation: "1977-01-01T23:00:00.000+00:00",
         },
       };
-      Robot.create = jest.fn();
+      const robot2 = {
+        name: "Robina",
+        img: "https://cdn.computerhoy.com/sites/navi.axelspringer.es/public/styles/480/public/media/image/2012/10/4559-6-mejores-robots.jpg?itok=ZoIBaSaR",
+        Stats: {
+          speed: 8,
+          resistance: 5,
+          creation: "1977-01-01T23:00:00.000+00:00",
+        },
+      };
+      Robot.create = jest.fn().mockResolvedValue(robot2);
       const req = {
         body: robot,
       };
       const res = {
         json: jest.fn().mockResolvedValue(robot),
       };
+
+      await createRobot(req, res);
+
+      expect(Robot.create).toHaveBeenCalledWith(robot);
+      expect(res.json).toHaveBeenCalledWith(robot2);
     });
+  });
+  describe("And Robot.create rejects", () => {
+    test("then it should invoke next function with error rejected", async () => {
+      const error = {};
+      const robot = {
+        name: "Robin",
+        img: "https://cdn.computerhoy.com/sites/navi.axelspringer.es/public/styles/480/public/media/image/2012/10/4559-6-mejores-robots.jpg?itok=ZoIBaSaR",
+        Stats: {
+          speed: 5,
+          resistance: 4,
+          creation: "1977-01-01T23:00:00.000+00:00",
+        },
+      };
+      Robot.create = jest.fn().mockRejectedValue(error);
+      const req = {
+        body: robot,
+      };
+      const res = {
+        json: jest.fn(),
+      };
 
-    describe("And Robot.create rejects", () => {
-      test("then it should invoke next function with error rejected", async () => {
-        const error = {};
-        Robot.create = jest.fn().mockRejectedValue(error);
-        const req = {
-          body: {},
-        };
-        const res = {};
+      const next = jest.fn();
 
-        const next = jest.fn();
+      await createRobot(req, res, next);
 
-        await createRobot(req, res, next);
-
-        expect(next).toHaveBeenCalledWith(error);
-        expect(error).toHaveProperty("code");
-        expect(error.code).toBe(400);
-        expect(error.message).toBe("Please introduce valid data");
-      });
+      expect(next).toHaveBeenCalledWith(error);
+      expect(error).toHaveProperty("code");
+      expect(error.code).toBe(400);
+      expect(error.message).toBe("Please introduce valid data");
     });
   });
 });
