@@ -13,4 +13,6 @@ router.get("/:id", getRobotById);
 
 router.post("/create", createRobot);
 
+router.delete("/delete/:id");
+
 module.exports = router;
