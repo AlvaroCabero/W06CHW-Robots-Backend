@@ -39,11 +39,10 @@ const createRobot = async (req, res, next) => {
   }
 };
 const deleteRobot = async (req, res, next) => {
-  const { i } = req.params;
-  // const searchedRobot = robots.find((robot)=>robot.id === id);
+  const { id } = req.params;
 
   try {
-    const searchedRobot = await Robot.findById(id);
+    const searchedRobot = await Robot.findByIdAndDelete(id);
     if (searchedRobot) {
       res.json(searchedRobot);
     } else {
