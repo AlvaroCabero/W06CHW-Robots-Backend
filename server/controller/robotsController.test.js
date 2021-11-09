@@ -1,5 +1,5 @@
 const Robot = require("../../database/models/robot");
-const { getRobots, getRobotById } = require("./robotsController");
+const { getRobots, getRobotById, createRobot } = require("./robotsController");
 
 describe("Given a getRobots function", () => {
   describe("When it receives an object res", () => {
@@ -69,7 +69,7 @@ describe("Given a getRobotById function,", () => {
         Robot.findById = jest.fn().mockRejectedValue(error);
         const req = {
           params: {
-            id: 0,
+            id: 33,
           },
         };
         const res = {};
@@ -159,6 +159,26 @@ describe("Given a createRobot function", () => {
       const res = {
         json: jest.fn().mockResolvedValue(robot),
       };
+    });
+
+    describe("And Robot.create rejects", () => {
+      test("then it should invoke next function with error rejected", async () => {
+        const error = {};
+        Robot.create = jest.fn().mockRejectedValue(error);
+        const req = {
+          body: {},
+        };
+        const res = {};
+
+        const next = jest.fn();
+
+        await createRobot(req, res, next);
+
+        expect(next).toHaveBeenCalledWith(error);
+        expect(error).toHaveProperty("code");
+        expect(error.code).toBe(400);
+        expect(error.message).toBe("Please introduce valid data");
+      });
     });
   });
 });
