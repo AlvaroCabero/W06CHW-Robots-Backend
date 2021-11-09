@@ -139,3 +139,26 @@ describe("Given a getRobotById function,", () => {
     });
   });
 });
+
+describe("Given a createRobot function", () => {
+  describe("When it receives a request with a robot object, with no id, an object res, and a function next", () => {
+    test("Then it should invoke the method json of res with the same robot object", async () => {
+      const robot = {
+        name: "Robin",
+        img: "https://cdn.computerhoy.com/sites/navi.axelspringer.es/public/styles/480/public/media/image/2012/10/4559-6-mejores-robots.jpg?itok=ZoIBaSaR",
+        Stats: {
+          speed: 5,
+          resistance: 4,
+          creation: "1977-01-01T23:00:00.000+00:00",
+        },
+      };
+      Robot.create = jest.fn();
+      const req = {
+        body: robot,
+      };
+      const res = {
+        json: jest.fn().mockResolvedValue(robot),
+      };
+    });
+  });
+});

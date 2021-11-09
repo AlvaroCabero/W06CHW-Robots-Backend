@@ -29,7 +29,7 @@ const getRobotById = async (req, res, next) => {
 const createRobot = async (req, res, next) => {
   try {
     const robot = req.body;
-    debug(robot);
+    debug("robot");
     const newRobot = await Robot.create(robot);
     res.json(newRobot);
   } catch (error) {
